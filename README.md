@@ -28,8 +28,8 @@ func main() {
 			hp.Push(i)
 		}
 
-		// 必须关闭,不然阻塞死锁
-		hp.Close()
+		// push任务结束后必须关闭, 否则死锁
+		hp.CloseQueue()
 	}()
 
 	// 跑起来! 伙计

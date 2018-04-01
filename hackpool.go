@@ -12,13 +12,12 @@ type HackPool struct {
 }
 
 func New(numGoroutine int, function func(interface{})) *HackPool {
-	t := &HackPool{
+	return &HackPool{
 		state:    make(chan struct{}, numGoroutine),
 		messages: make(chan interface{}, numGoroutine),
 		numGo:    numGoroutine,
 		function: function,
 	}
-	return t
 }
 
 func (c *HackPool) QueueCount() int {
@@ -29,7 +28,7 @@ func (c *HackPool) Push(data interface{}) {
 	c.messages <- data
 }
 
-func (c *HackPool) Close() {
+func (c *HackPool) CloseQueue() {
 	close(c.messages)
 }
 
@@ -40,7 +39,7 @@ func (c *HackPool) Run() {
 	// 阻塞,等待message有数据或close
 	for v := range c.messages {
 
-		// 重点:当state被赋值,上一个协程才会结束
+		// 增加state的目的是为了控制同时执行的协程数量
 		c.state <- struct{}{}
 
 		wg.Add(1)
@@ -49,8 +48,7 @@ func (c *HackPool) Run() {
 
 			c.function(value)
 
-			// 阻塞, 等待state被赋值.
-			// 增加state的目的是为了保证每个函数能够执行完,也就是保证同时执行的函数数量
+			// 协程执行完毕, 下一个协程才能启动
 			<-c.state
 
 			wg.Done()
