@@ -13,7 +13,7 @@ type HackPool struct {
 func New(numGoroutine int, function func(interface{})) *HackPool {
 	return &HackPool{
 		numGo:    numGoroutine,
-		messages: make(chan interface{}, numGoroutine),
+		messages: make(chan interface{}),
 		function: function,
 	}
 }
