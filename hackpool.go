@@ -18,10 +18,6 @@ func New(numGoroutine int, function func(interface{})) *HackPool {
 	}
 }
 
-func (c *HackPool) QueueCount() int {
-	return len(c.messages)
-}
-
 func (c *HackPool) Push(data interface{}) {
 	c.messages <- data
 }
