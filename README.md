@@ -10,7 +10,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/Greyh4t/hackpool"
+	"github.com/greyh4t/hackpool"
 )
 
 func main() {
@@ -39,7 +39,7 @@ func main() {
 
 ## Installation
 
-    go get github.com/Greyh4t/hackpool
+    go get github.com/greyh4t/hackpool
 
 ## License
 
