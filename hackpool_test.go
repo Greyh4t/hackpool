@@ -11,9 +11,9 @@ func TestHackPool(t *testing.T) {
 	numGoroutine := 2
 	taskCount := 10000
 
-	hp = New(numGoroutine, func(i interface{}) {
+	hp = New(numGoroutine, func(i ...interface{}) {
 
-		fmt.Println(i.(int))
+		fmt.Println(i[0].(int))
 
 		//time.Sleep(time.Second * 2)
 	})

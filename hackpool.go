@@ -6,19 +6,19 @@ import (
 
 type HackPool struct {
 	numGo    int
-	messages chan interface{}
-	function func(interface{})
+	messages chan []interface{}
+	function func(...interface{})
 }
 
-func New(numGoroutine int, function func(interface{})) *HackPool {
+func New(numGoroutine int, function func(...interface{})) *HackPool {
 	return &HackPool{
 		numGo:    numGoroutine,
-		messages: make(chan interface{}),
+		messages: make(chan []interface{}),
 		function: function,
 	}
 }
 
-func (c *HackPool) Push(data interface{}) {
+func (c *HackPool) Push(data ...interface{}) {
 	c.messages <- data
 }
 
@@ -34,7 +34,7 @@ func (c *HackPool) Run() {
 	for i := 0; i < c.numGo; i++ {
 		go func() {
 			for v := range c.messages {
-				c.function(v)
+				c.function(v...)
 			}
 			wg.Done()
 		}()
